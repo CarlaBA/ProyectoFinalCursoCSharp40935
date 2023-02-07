@@ -10,13 +10,13 @@ namespace Proyecto_final
     internal class MetodosProductosVendidos
     {
         public static string conexion = "Data Source = DESKTOP-2FTHB12\\MSSQLSERVER1; Initial Catalog = SistemaGestion; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
-        public static List<ProductoVendido> ObtenerProductosVendidos(long id)
+        public static List<Producto> ObtenerProductosVendidos(long idUsuario)
         {
-            List<ProductoVendido> productosVendidos = new List<ProductoVendido>();
+            List<long> idProductos = new List<long>();
 
             using (SqlConnection con = new SqlConnection(conexion))
             {
-                SqlCommand comando = new SqlCommand($"SELECT Stock, IdProducto, IdVenta FROM ProductoVendido WHERE Id = {id} ", con);
+                SqlCommand comando = new SqlCommand($"SELECT IdProducto FROM Venta INNER JOIN ProductoVendido ON Venta.Id = ProductoVendido.IdVenta WHERE IdUsuario = {idUsuario} ", con);
                 con.Open();
 
                 SqlDataReader reader = comando.ExecuteReader();
@@ -24,16 +24,21 @@ namespace Proyecto_final
                 {
                     while (reader.Read())
                     {
-
-                        ProductoVendido productoVendido = new ProductoVendido();
-                        productoVendido.Id = reader.GetInt64(0);
-                        productoVendido.Stock = reader.GetInt32(1);
-                        productoVendido.IdProducto= reader.GetInt64(2);
-                        productoVendido.IdVenta = reader.GetInt64(3);
-
-                        productosVendidos.Add(productoVendido);
+                        idProductos.Add(reader.GetInt64(0));
+                       
                     }
-                } return productosVendidos;
+                }
+                List<Producto> productos = new List<Producto>();
+                foreach (var item in idProductos)
+                {
+
+                    Producto producto = new Producto();
+                    MetodosProducto.ObtenerProducto(item);
+                    productos.Add(producto);
+                }
+                
+                
+                return productos;
 
             }
         }
