@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Proyecto_final
 {
@@ -54,7 +55,8 @@ namespace Proyecto_final
 
 
             Console.WriteLine("***OBTENER TODOS LOS PRODUCTOS VENDIDOS QUE CARGO EL USUARIO 1***");
-            List<ProductoVendido> productosVendidos = MetodosProductosVendidos.ObtenerProductosVendidos(1);
+            List<ProductoVendido> productosVendidos = new List<ProductoVendido>();
+            MetodosProductosVendidos.ObtenerProductosVendidos(1);
 
             Console.WriteLine("---ID Producto--- \t  ---Descripciones---");
             foreach (var id in productosVendidos)
@@ -92,8 +94,8 @@ namespace Proyecto_final
 
 
             Console.WriteLine("***INICIO DE SESION***");
-
-
+            Usuario usuarioLogin = MetodosUsuario.LogginUsuario("tcasazza","SoyTobiasCasazza");
+            Console.WriteLine($"Usuario:{usuarioLogin.NombreUsuario} \tApellido:{usuarioLogin.Apellido}\tMail:{usuarioLogin.Mail}");
             
            
 

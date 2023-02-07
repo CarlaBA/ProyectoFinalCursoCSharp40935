@@ -41,56 +41,35 @@ namespace Proyecto_final
         }
 
 
-        public static bool LogginUsuario(string usuario, string contraseña)
+        public static Usuario LogginUsuario(string usuario, string contraseña)
         {
-            int cont = 0;
-            bool logingExitoso = false;
+            Usuario usuarioLogin = new Usuario();
 
             using (SqlConnection con = new SqlConnection(conexion))
             {
-                SqlCommand comando = new SqlCommand ($"SELECT * FROM Usuario WHERE NombreUsuario = {usuario}, Contraseña = {contraseña}",con);
+                SqlCommand comando = new SqlCommand($"SELECT * FROM Usuario WHERE NombreUsuario = {usuario} and Contraseña = {contraseña}", con);
                 con.Open();
 
                 SqlDataReader reader = comando.ExecuteReader();
-              
-                do
-                {
-                if (contraseña == contraseña && usuario == usuario)
-                {
-                        logingExitoso = true;
-                }
-                 else
-                {
-                  Console.WriteLine("PASWORD  O NOMBRE INCORRECTO, por favor vuelva a intentarlo");
-                }
-
-                 cont++;
-
-                 if (cont > 5)
-                {
-                 if (cont == 4)
-                {
-                Console.WriteLine("ULTIMO INTENGO ANTES DE QUE EL PROGRAMA SE CIERRE");
-                }
-                break;
-                }
-
-                } while (logingExitoso is false);
 
 
-                if (logingExitoso)
+                if (reader.HasRows)
                 {
-                            Console.WriteLine("BIENVENIDO!!!");
-                            return logingExitoso = true;
-                }
-                        else
-                        {
-                            Console.WriteLine("ERROR AL LOGEARSE");
-                            return logingExitoso = false;
-                        }
+                    while (reader.Read())
+                    {
+                        Usuario user = new Usuario();
+                        user.Id = reader.GetInt64(0);
+                        user.Nombre = reader.GetString(1);
+                        user.Apellido = reader.GetString(2);
+                        user.NombreUsuario = reader.GetString(3);
+                        user.Contrasenia = reader.GetString(4);
+                        user.Mail = reader.GetString(5);
 
+                        usuarioLogin = user;
                     }
-            return logingExitoso;
+                }
+            }   
+            return usuarioLogin;
 
         }
     }
