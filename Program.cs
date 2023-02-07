@@ -95,7 +95,7 @@ namespace Proyecto_final
 
             Console.WriteLine("***INICIO DE SESION***");
             Usuario usuarioLogin = MetodosUsuario.LogginUsuario("tcasazza","SoyTobiasCasazza");
-            Console.WriteLine($"Usuario:{usuarioLogin.NombreUsuario} \tApellido:{usuarioLogin.Apellido}\tMail:{usuarioLogin.Mail}");
+            Console.WriteLine($"Usuario:{usuarioLogin.Nombre} \tApellido:{usuarioLogin.Apellido}\tMail:{usuarioLogin.Mail}");
             
            
 
