@@ -5,27 +5,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Proyecto_final
+namespace Proyecto_final.Metodos
 {
     internal class MetodosProductosVendidos
     {
-        public static string conexion = "Data Source = DESKTOP-2FTHB12\\MSSQLSERVER1; Initial Catalog = SistemaGestion; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
         public static List<Producto> ObtenerProductosVendidos(long idUsuario)
         {
             List<long> idProductos = new List<long>();
 
-            using (SqlConnection con = new SqlConnection(conexion))
-            {
-                SqlCommand comando = new SqlCommand($"SELECT IdProducto FROM Venta INNER JOIN ProductoVendido ON Venta.Id = ProductoVendido.IdVenta WHERE IdUsuario = {idUsuario} ", con);
-                con.Open();
+            SqlCommand comando = new SqlCommand("SELECT IdProducto FROM Venta INNER JOIN ProductoVendido ON Venta.Id = ProductoVendido.IdVenta WHERE IdUsuario = @idUsuario ");
+            comando.Parameters.AddWithValue("@idUsuario", idUsuario);
 
-                SqlDataReader reader = comando.ExecuteReader();
-                if (reader.HasRows)
+            Program.conexionSql.GetCommand(comando);
+
+            SqlDataReader reader = comando.ExecuteReader();
+            if (reader.HasRows)
                 {
                     while (reader.Read())
                     {
                         idProductos.Add(reader.GetInt64(0));
-                       
+
                     }
                 }
                 List<Producto> productos = new List<Producto>();
@@ -36,11 +35,11 @@ namespace Proyecto_final
                     MetodosProducto.ObtenerProducto(item);
                     productos.Add(producto);
                 }
-                
-                
+
+
                 return productos;
 
-            }
+           
         }
     }
 }

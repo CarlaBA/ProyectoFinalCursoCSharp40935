@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace Proyecto_final
 {
-    internal class MetodosUsuario
+    internal static class MetodosUsuario
     {
-        public static string conexion = "Data Source = DESKTOP-2FTHB12\\MSSQLSERVER1; Initial Catalog = SistemaGestion; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
         public static List<Usuario> TraerUsuario(long id)
         {
             List<Usuario> listaUsuario = new List<Usuario>();
 
-            using (SqlConnection con = new SqlConnection(conexion))
-            {
-                SqlCommand comando = new SqlCommand ($"SELECT * FROM Usuario WHERE Id = {id} ",con);
-                con.Open();
+  
+            SqlCommand comando = new SqlCommand ("SELECT * FROM Usuario WHERE @Id = id");
+            comando.Parameters.AddWithValue("@id", id);
 
-                SqlDataReader reader = comando.ExecuteReader();
+            Program.conexionSql.GetCommand(comando);
+
+            using (SqlDataReader reader = comando.ExecuteReader())
+            {
                 if (reader.HasRows)
                 {
                     while (reader.Read())
@@ -34,42 +35,45 @@ namespace Proyecto_final
                         listaUsuario.Add(usuario);
                     }
                 }
-                return listaUsuario;
 
+                return listaUsuario;
             }
-            
+
         }
+            
+   
 
 
         public static Usuario LogginUsuario(string usuario, string contraseña)
         {
-            Usuario usuarioLogin = new Usuario();
+            Usuario user = new Usuario();
 
-            using (SqlConnection con = new SqlConnection(conexion))
+            
+          
+            SqlCommand comando = new SqlCommand("SELECT * FROM Usuario WHERE @NombreUsuario = NombreUsuario and @Contraseña = Contraseña");
+            comando.Parameters.AddWithValue("@NombreUsuario", usuario);
+            comando.Parameters.AddWithValue("@Contraseña", contraseña);
+            Program.conexionSql.GetCommand(comando);
+
+            SqlDataReader reader = comando.ExecuteReader();
+
+            if (reader.HasRows)
             {
-                SqlCommand comando = new SqlCommand($"SELECT * FROM Usuario WHERE NombreUsuario = {usuario} and Contraseña = {contraseña}", con);
-                con.Open();
+               while (reader.Read())
+               {
+                  
+                  user.Id = reader.GetInt64(0);
+                  user.Nombre = reader.GetString(1);
+                  user.Apellido = reader.GetString(2);
+                  user.NombreUsuario = reader.GetString(3);
+                  user.Contrasenia = reader.GetString(4);
+                  user.Mail = reader.GetString(5);
 
-                SqlDataReader reader = comando.ExecuteReader();
-
-
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        Usuario user = new Usuario();
-                        user.Id = reader.GetInt64(0);
-                        user.Nombre = reader.GetString(1);
-                        user.Apellido = reader.GetString(2);
-                        user.NombreUsuario = reader.GetString(3);
-                        user.Contrasenia = reader.GetString(4);
-                        user.Mail = reader.GetString(5);
-
-                        usuarioLogin = user;
-                    }
-                }
-            }   
-            return usuarioLogin;
+                  
+               }
+            }
+             
+            return user;
 
         }
     }

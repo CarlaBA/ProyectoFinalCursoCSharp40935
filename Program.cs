@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Proyecto_final.Metodos;
+using System;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Proyecto_final
 {
     internal class Program
     {
+        static public ConexionSql conexionSql = new ConexionSql();
         static void Main(string[] args)
         {
 
