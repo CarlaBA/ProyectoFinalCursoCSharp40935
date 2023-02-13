@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto_final
 {
-    internal class MetodosVenta
+    internal static class MetodosVenta
     {
         public static List<Venta> TraerVentas(long id)
         {

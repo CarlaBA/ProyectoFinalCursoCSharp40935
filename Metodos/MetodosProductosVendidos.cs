@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto_final.Metodos
 {
-    internal class MetodosProductosVendidos
+    internal static class MetodosProductosVendidos
     {
         public static List<Producto> ObtenerProductosVendidos(long idUsuario)
         {
