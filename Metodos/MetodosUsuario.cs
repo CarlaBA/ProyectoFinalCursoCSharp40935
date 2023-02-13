@@ -19,25 +19,24 @@ namespace Proyecto_final
 
             Program.conexionSql.GetCommand(comando);
 
-            using (SqlDataReader reader = comando.ExecuteReader())
+            SqlDataReader reader = comando.ExecuteReader();
+            if (reader.HasRows)
             {
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        Usuario usuario = new Usuario();
-                        usuario.Id = reader.GetInt64(0);
-                        usuario.Nombre = reader.GetString(1);
-                        usuario.Apellido = reader.GetString(2);
-                        usuario.NombreUsuario = reader.GetString(3);
-                        usuario.Contrasenia = reader.GetString(4);
-                        usuario.Mail = reader.GetString(5);
-                        listaUsuario.Add(usuario);
-                    }
-                }
+              while (reader.Read())
+              {
+                Usuario usuario = new Usuario();
+                usuario.Id = reader.GetInt64(0);
+                usuario.Nombre = reader.GetString(1);
+                usuario.Apellido = reader.GetString(2);
+                usuario.NombreUsuario = reader.GetString(3);
+                usuario.Contrasenia = reader.GetString(4);
+                usuario.Mail = reader.GetString(5);
+                listaUsuario.Add(usuario);
+              }
+            }
 
                 return listaUsuario;
-            }
+            
 
         }
             
